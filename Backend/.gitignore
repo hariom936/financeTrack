@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+dist/ # Add this if you compile TypeScript to a 'dist' folder
+.env* # This will ignore .env, .env.local, .env.dev, .env.prod, etc.

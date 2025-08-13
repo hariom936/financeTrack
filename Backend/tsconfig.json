@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es6"
+    ],
+    "target": "es5",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    
+  },
+  "include": [
+    "**/*",
+    "/home/rakesh.chandra/Project/Finance_group_BE/src/utils/datasource.ts"
+  ]
+}
+
+
+
+
