@@ -115,11 +115,11 @@ export class UpdateUser {
 
 
 export class LoginUser {
-  @IsNotEmpty()
+
   @IsEmail()
   userEmail: string;
 
-  @IsNotEmpty()
+  
   @IsString()
   password: string;
 }
