@@ -10,10 +10,11 @@ const config = {
     process.env.NODE_ENV as string
   ),
   port: process.env.PORT ?? 8001,
-  jwts: {
-    secret: process.env.JWT_SECRET as string,
-    accessExpirationMinutes: process.env.JWT_ACCESS_EXPIRATION as string,
-  },
+ jwts: {
+  secret: process.env.JWT_SECRET || (() => { throw new Error("Missing JWT_SECRET"); })(),
+  accessExpiration: process.env.JWT_ACCESS_EXPIRATION || "15m",  // ✅ Must be string (e.g., "15m", "1d", "365d")
+
+},
   corsOptions: {
     origin: (origin, callback) => {
       let CORS_ORIGIN = "*";

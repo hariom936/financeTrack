@@ -15,8 +15,12 @@ import { Users } from "../entity/Users";
 import { Role } from "../entity/Role";
 import bcrypt from "bcrypt";
 import messages from "../constant/messages";
-
-
+import { sign } from 'jsonwebtoken';
+import config from "../config/config";
+import {
+  LoginUser
+} from "../validations/UserValidation";
+import { generateJwtToken } from '../utils/generateJwtToken'; // adjust path
 // Removed UserData interface as CreateUser is used for validation and data transfer
 interface UserData {
   first_name: string;
@@ -148,19 +152,60 @@ export class UserService {
   // Method to delete a user by userId
 
   public async deleteUser(userId: number): Promise<void> {
-  const userToDelete = await this.user.findOne({ where: { id: userId } });
+    const userToDelete = await this.user.findOne({ where: { id: userId } });
 
-  if (!userToDelete) {
-    throw new Error(`User with id ${userId} not found`);
+    if (!userToDelete) {
+      throw new Error(`User with id ${userId} not found`);
+    }
+
+    try {
+      await this.user.remove(userToDelete);
+    } catch (error) {
+      throw new Error(`Unable to delete user with id ${userId}. Error: ${error.message}`);
+    }
   }
 
-  try {
-    await this.user.remove(userToDelete);
-  } catch (error) {
-    throw new Error(`Unable to delete user with id ${userId}. Error: ${error.message}`);
+
+  //Login Page
+ public async loginUser(user: LoginUser) {
+    const userRepo = AppDataSource.getRepository(Users);
+
+    const existingUser = await userRepo.findOne({
+      where: { email: user.userEmail },
+      relations: ['role'], // if using role entity
+    });
+
+    if (!existingUser) {
+      throw new Error('Invalid email or password');
+    }
+
+    const isPasswordValid = await bcrypt.compare(user.password, existingUser.password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid email or password');
+    }
+
+    // Prepare token payload
+    const tokenPayload = {
+      userId: existingUser.id,
+      email: existingUser.email,
+      role: existingUser.role?.name || 'user',
+    };
+
+   const token = await generateJwtToken(tokenPayload);
+
+    return {
+      user: {
+        id: existingUser.id,
+        email: existingUser.email,
+        name: `${existingUser.first_name} ${existingUser.last_name}`,
+        role: existingUser.role?.name,
+        // password: existingUser.password, // hashed password returned
+      },
+      token,
+    };
   }
-}
-
 
 
 }
+// Removed unused compare function as bcrypt.compare is used directly.
+

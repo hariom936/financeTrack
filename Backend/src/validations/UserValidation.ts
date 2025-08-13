@@ -46,16 +46,6 @@ export class CreateUser {
     }
 }
 
-export class LoginUser {
-    @IsNotEmpty({ message: validationConstants.REQUIRED })
-    @IsEmail({}, { message: validationConstants.INVALID_EMAIL })
-    email: string;
-
-    @IsNotEmpty({ message: validationConstants.REQUIRED })
-    @IsString({ message: validationConstants.IS_STRING_TYPE })
-    password: string; // Changed to string for security
-}
-
 export class UserListing {
     @IsOptional()
     @IsString({ message: validationConstants.IS_STRING_TYPE })
@@ -88,7 +78,7 @@ export class UserListing {
     @Min(1, { message: 'Page must be a positive number' })
     page: number;
 }
-export class UserId{
+export class UserId {
     @IsNotEmpty({ message: "User ID is required" })
     @IsNumber({}, { message: "User ID must be a number" })
     userId: number;
@@ -121,4 +111,15 @@ export class UpdateUser {
     @IsOptional()
     @IsIn(['admin', 'user', 'read-only'])
     role?: 'admin' | 'user' | 'read-only';
+}
+
+
+export class LoginUser {
+  @IsNotEmpty()
+  @IsEmail()
+  userEmail: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }

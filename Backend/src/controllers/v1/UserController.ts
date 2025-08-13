@@ -26,6 +26,7 @@ import { query, Request, Response } from "express";
 import { apiRoute } from "../../utils/apiSemver";
 import { UserService } from "../../services/UserService";
 import { Users } from "../../entity/Users";
+import { ApiError } from "../../utils/Apierror";
 
 @Service()
 @JsonController(apiRoute(component.USER))
@@ -173,6 +174,30 @@ public async deleteUser(
   } catch (error) {
     return this.responseService.serverError({
       res,
+      error: error.message,
+    });
+  }
+}
+
+// src/controllers/AuthController.ts
+
+@Post(action.LOGIN)
+public async loginUser(
+  @Body({ validate: true }) user: LoginUser,
+  @Res() res: Response
+) {
+  try {
+    const result = await this.userService.loginUser(user);
+
+    return res.status(200).json({
+      message: 'Login successful!',
+      responseCode: 200,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Login user failed!',
+      responseCode: 400,
       error: error.message,
     });
   }
