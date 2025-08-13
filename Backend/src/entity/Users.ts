@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Role } from "./Role";
 import { Transactions } from "./Transactions ";
@@ -16,21 +17,22 @@ export class Users {
   id!: number;
 
   @Column({ length: 50 })
-  firstName!: string;
+  first_name!: string;
 
   @Column({ length: 50, nullable: true })
-  lastName!: string | null;
+  last_name!: string | null;
 
   @Column({ length: 255, unique: true })
   email!: string;
 
-  @Column({ length: 15, unique: true, nullable: true })
-  phone!: string | null;
+  @Column({ unique: true, nullable: true })
+  phone!: number;
 
   @Column({ length: 255 })
   password!: string; // Hashed password
 
   @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'roleId' }) // Add this line to specify the foreign key column name
   role!: Role;
 
   @OneToMany(() => Transactions, transaction => transaction.user)

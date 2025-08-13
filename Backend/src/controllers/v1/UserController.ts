@@ -8,6 +8,8 @@ import {
   QueryParams,
   Patch,
   Delete,
+  Put,
+  QueryParam,
 } from "routing-controllers";
 import { Service } from "typedi";
 import { ResponseService } from "../../services/ResponseService";
@@ -15,11 +17,12 @@ import {
   CreateUser,
   LoginUser,
   UpdateUser,
+  UserId,
   UserListing,
 } from "../../validations/UserValidation";
 import messages from "../../constant/messages";
 import { action, component } from "../../constant/api";
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import { apiRoute } from "../../utils/apiSemver";
 import { UserService } from "../../services/UserService";
 import { Users } from "../../entity/Users";
@@ -35,6 +38,10 @@ export default class CustomerAdminAuthController {
     this.responseService = new ResponseService();
   }
 
+  // src/controllers/UserController.ts
+
+  //Add New User
+
   @Post(action.ADD)
   public async completeUserOnboarding(
     @Req() req: Request,
@@ -42,23 +49,41 @@ export default class CustomerAdminAuthController {
     @Res() res: Response
   ) {
     try {
-      // Ensure 'role' is set, or provide a default value
-      // if (!userData.role) {
-      //   userData.role = 'user';  // Assign a default role if not provided
-      // }
-
-      // Now the userData will have a 'role' field
       const user = await this.userService.createUser(userData);
-      if (user) {
+      return this.responseService.success({
+        res,
+        message: messages.USER.ADD_USER_SUCCESS,
+        data: user,
+      });
+    } catch (error) {
+
+      // Handle other unexpected errors
+      return this.responseService.serverError({
+        res,
+        error,
+      });
+    }
+  }
+
+  //Get User Listing
+  @Get(action.LIST)
+  public async getListing(
+    @Req() req: Request,
+    @QueryParams() query: UserListing,
+    @Res() res: Response
+  ) {
+    try {
+      const fetchData = await this.userService.fetchData(query);
+      if (fetchData) {
         return this.responseService.success({
           res,
-          message: messages.USER.ADD_USER_SUCCESS,
-          data: user,
+          message: messages.SUCCESS,
+          data: fetchData,
         });
       } else {
-        return this.responseService.failure({
+        return this.responseService.noDataFound({
           res,
-          message: messages.USER.ADD_USER_FAILED,
+          message: messages.NOT_FOUND,
         });
       }
     } catch (error) {
@@ -68,5 +93,92 @@ export default class CustomerAdminAuthController {
       });
     }
   }
+
+  @Get(action.DETAIL)
+  public async getUserDetails(
+    @Req() req: Request,
+    @QueryParams() query: UserId,
+    @Res() res: Response
+  ) {
+    try {
+      const fetchData = await this.userService.fetchDetails(query);
+      if (fetchData) {
+        return this.responseService.success({
+          res,
+          message: messages.SUCCESS,
+          data: fetchData,
+        });
+      } else {
+        return this.responseService.noDataFound({
+          res,
+          message: messages.NOT_FOUND,
+        });
+      }
+    } catch (error) {
+      return this.responseService.serverError({
+        res,
+        error,
+      });
+    }
+  }
+
+  //Update User
+  @Put(action.UPDATE)
+  public async updateUser(
+    @Req() req: Request,
+    @QueryParams() query: UserId,
+    @Body() body: any, // 👈 Add this line to get data from the request body
+    @Res() res: Response
+  ) {
+    try {
+      // Pass both the body and the query to the service method
+      const fetchData = await this.userService.updateUsers(body, query); // 👈 Correctly pass two arguments
+
+      if (fetchData) {
+        return this.responseService.success({
+          res,
+          message: messages.SUCCESS,
+          data: fetchData,
+        });
+      } else {
+        return this.responseService.noDataFound({
+          res,
+          message: messages.NOT_FOUND,
+        });
+      }
+    } catch (error) {
+      return this.responseService.serverError({
+        res,
+        error,
+      });
+    }
+  }
+
+  //Delete User
+  @Delete(action.DELETE)
+public async deleteUser(
+  @Res() res: Response,
+  @QueryParam('userId') userId: number,
+  @Req() req: Request
+) {
+  try {
+    console.log('Deleting user with ID:', userId); // add this to confirm
+
+    await this.userService.deleteUser(userId);
+
+    return this.responseService.success({
+      res,
+      message: 'User deleted successfully',
+    });
+  } catch (error) {
+    return this.responseService.serverError({
+      res,
+      error: error.message,
+    });
+  }
+}
+
+
+
 
 }

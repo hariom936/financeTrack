@@ -26,8 +26,8 @@ export class CreateUser {
     email: string;
 
     @IsNotEmpty({ message: validationConstants.REQUIRED })
-    @IsString({ message: validationConstants.IS_STRING_TYPE })
-    phone: string;
+    @IsNumber()
+    phone: number;
 
     @IsNotEmpty({ message: validationConstants.REQUIRED })
     @IsString({ message: validationConstants.IS_STRING_TYPE })
@@ -79,10 +79,19 @@ export class UserListing {
     @IsString({ message: validationConstants.IS_STRING_TYPE })
     sortBy: string;
 
+    @IsOptional()
+    @IsNumber()
+    userId: number;
+
     @IsNotEmpty({ message: "Page is Required" })
     @IsNumber()
     @Min(1, { message: 'Page must be a positive number' })
     page: number;
+}
+export class UserId{
+    @IsNotEmpty({ message: "User ID is required" })
+    @IsNumber({}, { message: "User ID must be a number" })
+    userId: number;
 }
 
 export class UpdateUser {
@@ -108,4 +117,8 @@ export class UpdateUser {
     @IsString()
     @MinLength(8, { message: 'Password must be at least 8 characters long' })
     password?: string;
+
+    @IsOptional()
+    @IsIn(['admin', 'user', 'read-only'])
+    role?: 'admin' | 'user' | 'read-only';
 }

@@ -2,8 +2,7 @@ import { MigrationInterface, QueryRunner, Table } from "typeorm";
 import { Role } from "../entity/Role";
 export class Roles1755087983724 implements MigrationInterface {
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // Create the roles table
+     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
                 name: 'role',
@@ -18,25 +17,26 @@ export class Roles1755087983724 implements MigrationInterface {
                     {
                         name: 'name',
                         type: 'varchar',
-                        length: '50',
                         isUnique: true,
                         isNullable: false,
                     },
                 ],
             }),
-            true // The `true` parameter checks if the table already exists
         );
 
         // Insert the default roles
-        await queryRunner.manager.save(Role, [
-            { name: 'admin' },
-            { name: 'user' },
-            { name: 'read-only' },
-        ]);
+        await queryRunner.manager.createQueryBuilder()
+            .insert()
+            .into('role')
+            .values([
+                { name: 'admin' },
+                { name: 'user' },
+                { name: 'read-only' },
+            ])
+            .execute();
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // Drop the roles table
         await queryRunner.dropTable('role');
     }
 

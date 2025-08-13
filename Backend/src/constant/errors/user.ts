@@ -23,8 +23,11 @@ export const user = {
   INVALID_USER_ID: {
     errorMessage: "INVALID USER ID NOT EXISTS",
   },
+  EMAIL_ALREADY_EXISTS: {
+    errorMessage: "Email already exists!",
+  },
   PHONE_NUMBER_ALREADY_EXISTS: {
-    errorMessage: "Entered Phone Number already exists!",
+    errorMessage: "Phone Number already exists!",
   },
 
   AUTHORIZEDUSER: {
