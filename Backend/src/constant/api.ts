@@ -5,6 +5,9 @@ const action = {
   DELETE: '/delete',
   DETAIL: '/detail',
   LOGIN: '/login',
+  SPENDING:'/spending-by-category',
+  INCOME:'/income-vs-expense',
+  MONTHLY: '/monthly-trend',
 
 };
 
@@ -13,6 +16,7 @@ const component = {
   ROLE: 'role',
   CATEGORY: 'category',
   TRANSACTION: 'transaction',
+  ANALYTICS: "analytics",
 };
 
 
