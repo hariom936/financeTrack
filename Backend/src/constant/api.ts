@@ -1,3 +1,5 @@
+import { Role } from "../entity/Role";
+
 const action = {
   ADD: '/add',
   LIST: '/list',
@@ -10,6 +12,7 @@ const action = {
 
 const component = {
   USER: 'user',
+  ROLE: 'role',
 };
 
 

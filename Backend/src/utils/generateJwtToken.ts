@@ -1,17 +1,27 @@
-import { sign } from 'jsonwebtoken';
-import { promisify } from 'util';
+import jwt from 'jsonwebtoken';
 import config from '../config/config';
 
-const signAsync = promisify<string | object | Buffer, string, object, string>(sign);
+export const generateJwtToken = (payload: object): Promise<string> => {
+  const secret = config.jwts.secret;
+  const expiration = config.jwts.accessExpiration;
 
-export const generateJwtToken = async (payload: object): Promise<string> => {
-  if (!config.jwts.secret) {
-    throw new Error("JWT secret not found");
+  if (!secret || typeof secret !== 'string') {
+    throw new Error('JWT secret missing or invalid');
   }
 
-  const token = await signAsync(payload, config.jwts.secret, {
-    expiresIn: config.jwts.accessExpiration, // ✅ e.g., "15m", "365d"
+  return new Promise((resolve, reject) => {
+    jwt.sign(
+      payload,
+      secret,
+      {
+        expiresIn: expiration as unknown as jwt.SignOptions['expiresIn']
+      },
+      (err, token) => {
+        if (err || !token) {
+          return reject(err || new Error('Token generation failed'));
+        }
+        resolve(token);
+      }
+    );
   });
-
-  return token;
 };

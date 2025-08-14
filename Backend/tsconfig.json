@@ -13,11 +13,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
     
   },
   "include": [
     "**/*",
-    "/home/rakesh.chandra/Project/Finance_group_BE/src/utils/datasource.ts"
+    "/home/hariom.verma/Project/Finance_group_BE/src/utils/datasource.ts"
   ]
 }
 

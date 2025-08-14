@@ -25,8 +25,6 @@ import { action, component } from "../../constant/api";
 import { query, Request, Response } from "express";
 import { apiRoute } from "../../utils/apiSemver";
 import { UserService } from "../../services/UserService";
-import { Users } from "../../entity/Users";
-import { ApiError } from "../../utils/Apierror";
 
 @Service()
 @JsonController(apiRoute(component.USER))

@@ -1,18 +1,21 @@
-// src/middleware/auth.ts
+import { Response, NextFunction } from "express";
+import { CustomRequest } from "../types/CustomRequest";
+import { verifyJwt } from "../utils/jwt";
 
-import { Request, Response, NextFunction } from 'express';
+export const authenticate = (req: CustomRequest, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
 
-export function authorizeRoles(...allowedRoles: string[]) {
-  return (req: any, res: Response, next: NextFunction) => {
-    const role = req.user?.role;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-    if (!allowedRoles.includes(role)) {
-      return res.status(403).json({
-        message: 'Access denied. Insufficient permissions.',
-        responseCode: 403,
-      });
-    }
+  const token = authHeader.split(" ")[1];
+  const decoded = verifyJwt(token);
 
-    next();
-  };
-}
+  if (!decoded) {
+    return res.status(403).json({ message: "Invalid or expired token" });
+  }
+
+  req.user = decoded; // No TS error here now
+  next();
+};

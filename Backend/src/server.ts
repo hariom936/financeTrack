@@ -5,12 +5,15 @@ import cors from "cors";
 import compression from "compression";
 import config from "../src/config/config";
 import express from "express";
-import { useExpressServer } from "routing-controllers";
+import { useContainer, useExpressServer } from "routing-controllers";
 import morgan from 'morgan';
 import path from "path";
 import AppDataSource from "../src/config/dbconfig";
 import databaseConstant from "./constant/databaseConstant";
 import dotenv from 'dotenv'
+import { Container } from 'typedi';
+
+
 // import uploads from "./utils/uploads";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
@@ -54,7 +57,7 @@ async function start() {
     app.use(cors(config.corsOptions));
     console.log(__dirname, "__dirname")
     app.use('/images', express.static(path.join(__dirname, '../appData/img')));
-
+    useContainer(Container); // <--- This links Routing-Controllers to TypeDI!
     // // Logging
     // app.use(morgan(':method :url :status :response-time ms - :res[content-length]'));
 

@@ -28,5 +28,19 @@ export default {
     DELETE_USER_FAILED: 'User delete has failed!',
     DELETE_USER_SUCCESS: 'User deleted successfully!',
   },
-
+  ROLE: {
+    ADD_ROLE_SUCCESS: 'Role created successfully!',
+    ADD_ROLE_FAILED: 'Role creation failed!',
+    ALREADY_EXISTS: 'Role already exists!',
+    NOT_FOUND: 'Role not found!',
+    ROLE_UPDATE_SUCCESS: 'Role updated successfully!',
+    ROLE_LISTING_SUCCESS: 'Role listed successfully!',
+    ROLE_UPDATE_FAILED: 'Role update has failed!',
+    ROLE_DELETED:'Role deleted successfully!',
+    ROLE_DELETE_FAILED:'Role delete failed!',
+    ROLE_FETCH:'Fetch Successfully !',
+    FETCH_ERROR:"Error is fetching role details ",
+    DELETE_ROLE_FAILED: 'Role delete has failed!',
+    DELETE_ROLE_SUCCESS: 'Role deleted successfully!',
+  },
 }
