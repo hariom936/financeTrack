@@ -26,14 +26,14 @@ export class CategoryController {
   }
 
   // All roles (view)
-  @Get('/list')
+  @Get(action.LIST)
   async list(@Res() res: any) {
     const cats = await this.categoryService.listCategories();
     return this.responseService.success({ res, data: cats });
   }
 
   // Admin & User only
-  @Put('/update')
+  @Put(action.UPDATE)
   @UseBefore(authorizeRoles('admin', 'user'))
   async update(@QueryParam("id") id: number, @Body() body: UpdateCategory, @Res() res: any) {
     const cat = await this.categoryService.updateCategory(id, body);
@@ -41,7 +41,7 @@ export class CategoryController {
   }
 
   // Admin & User only
-  @Delete('/delete')
+  @Delete(action.DELETE)
   @UseBefore(authorizeRoles('admin', 'user'))
   async delete(@QueryParam("id") id: number, @Res() res: any) {
     await this.categoryService.deleteCategory(id);
