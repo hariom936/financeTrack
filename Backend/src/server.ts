@@ -27,6 +27,10 @@ async function start() {
     const app = express(); // Create an express app
     const port = config.port;
 
+    app.use(cors({
+      origin: "http://localhost:5173",  // or "*" for dev
+      credentials: true                // if you use cookies
+    }));
     // Set security HTTP headers
     app.use(
       helmet({
@@ -54,7 +58,7 @@ async function start() {
     // app.use(compression());
 
     // Enable CORS
-    app.use(cors(config.corsOptions));
+    
     console.log(__dirname, "__dirname")
     app.use('/images', express.static(path.join(__dirname, '../appData/img')));
     useContainer(Container); // <--- This links Routing-Controllers to TypeDI!
@@ -62,7 +66,7 @@ async function start() {
     // app.use(morgan(':method :url :status :response-time ms - :res[content-length]'));
 
     // parse json request body
-    app.use(express.json({ limit:databaseConstant.JSON_PAYLOAD_LIMIT }));
+    app.use(express.json());
     // parse text request body
     app.use(express.text());
     // parse req cookies
