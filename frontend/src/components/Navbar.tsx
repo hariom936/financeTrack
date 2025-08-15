@@ -11,24 +11,51 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  if (!user) return null; // hide navbar if not logged in
+  if (!user) return null; // Hide navbar if not logged in
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-3 flex justify-between items-center">
-      <div className="flex gap-4">
-        <NavLink to="/dashboard" className={({isActive}) => isActive ? "font-bold underline" : ""}>
+    <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between">
+      {/* Logo or Placeholder */}
+      <div className="w-1/3" />
+
+      {/* Center Nav Links */}
+      <div className="flex justify-center space-x-6 w-1/3">
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            isActive
+              ? "font-bold underline"
+              : "hover:underline"
+          }
+        >
           Dashboard
         </NavLink>
-        <NavLink to="/transactions" className={({isActive}) => isActive ? "font-bold underline" : ""}>
+        <NavLink
+          to="/transactions"
+          className={({ isActive }) =>
+            isActive
+              ? "font-bold underline"
+              : "hover:underline"
+          }
+        >
           Transactions
         </NavLink>
         {(user.role === "admin" || user.role === "user") && (
-          <NavLink to="/categories" className={({isActive}) => isActive ? "font-bold underline" : ""}>
+          <NavLink
+            to="/categories"
+            className={({ isActive }) =>
+              isActive
+                ? "font-bold underline"
+                : "hover:underline"
+            }
+          >
             Categories
           </NavLink>
         )}
       </div>
-      <div className="flex items-center gap-4">
+
+      {/* Logout on the Right */}
+      <div className="flex items-center justify-end w-1/3 gap-4">
         <span className="text-sm capitalize">{user.role}</span>
         <button
           onClick={handleLogout}
