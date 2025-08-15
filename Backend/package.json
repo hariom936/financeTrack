@@ -1,7 +1,8 @@
 {
-  "name": "Full Stack Personal Finance Tracker - Assignment",
+  "name": "finance-track",
   "version": "1.0.0",
   "description": "",
+  "author": "hariom-verma",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc && cpx 'appData/img/**/*' 'build/appData/img '",
@@ -22,7 +23,6 @@
     "migration:revertLatest": "typeorm-ts-node-commonjs migration:revert -d ./src/config/dbconfig.ts"
   },
   "keywords": [],
-  "author": "Kelltontech",
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.17",

@@ -1,7 +1,8 @@
 {
-  "name": "FullStackPersonalFinanceTracker-Assignment-Backend",
+  "name": "finance-track",
   "private": true,
   "version": "0.0.0",
+  "author": "hariom-verma",
   "type": "module",
   "scripts": {
     "dev": "vite",
